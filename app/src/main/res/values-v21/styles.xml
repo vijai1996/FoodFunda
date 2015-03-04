@@ -1,0 +1,67 @@
+<!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Copyright (c) 2015. Vijai Chandra Prasad R.                                                   %
+  %                                                                                               %
+  % This program is free software: you can redistribute it and/or modify                          %
+  % it under the terms of the GNU General Public License as published by                          %
+  % the Free Software Foundation, either version 3 of the License, or                             %
+  % (at your option) any later version.                                                           %
+  %                                                                                               %
+  % This program is distributed in the hope that it will be useful,                               %
+  % but WITHOUT ANY WARRANTY; without even the implied warranty of                                %
+  % MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                                 %
+  % GNU General Public License for more details.                                                  %
+  %                                                                                               %
+  % You should have received a copy of the GNU General Public License                             %
+  % along with this program.  If not, see http://www.gnu.org/licenses                             %
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
+
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+
+
+    -->
+    <style name="AppBaseTheme" parent="Theme.AppCompat.Light">
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+
+
+        -->
+    </style>
+
+    <style name="MyTheme" parent="MyTheme.Base">
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+        <item name="android:colorPrimary">@color/PrimaryColor</item>
+        <!--   darker variant for the status bar and contextual app bars -->
+        <item name="android:colorPrimaryDark">@color/PrimaryColorDark</item>
+        <!--   theme UI controls like checkboxes and text fields -->
+        <item name="android:colorAccent">@color/colorAccent</item>
+
+    </style>
+
+    <style name="CustomAppBar" parent="ThemeOverlay.AppCompat.Dark">
+        <item name="android:actionBarItemBackground">@color/PrimaryColor</item>
+    </style>
+
+    <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">@color/PrimaryColor</item>
+        <item name="android:titleTextStyle">@style/MyTheme.ActionBar.TitleTextStyle</item>
+        <item name="android:textColor">@color/ab_txt_color</item>
+    </style>
+
+    <style name="MyTheme.ActionBar.TitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/ab_txt_color</item>
+    </style>
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+
+    </style>
+
+</resources>

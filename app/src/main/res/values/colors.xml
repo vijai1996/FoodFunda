@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Copyright (c) 2015. Vijai Chandra Prasad R.                                                   %
+  %                                                                                               %
+  % This program is free software: you can redistribute it and/or modify                          %
+  % it under the terms of the GNU General Public License as published by                          %
+  % the Free Software Foundation, either version 3 of the License, or                             %
+  % (at your option) any later version.                                                           %
+  %                                                                                               %
+  % This program is distributed in the hope that it will be useful,                               %
+  % but WITHOUT ANY WARRANTY; without even the implied warranty of                                %
+  % MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                                 %
+  % GNU General Public License for more details.                                                  %
+  %                                                                                               %
+  % You should have received a copy of the GNU General Public License                             %
+  % along with this program.  If not, see http://www.gnu.org/licenses                             %
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
+
+<resources>
+    <color name="PrimaryColor">#3f51b5</color>
+    <color name="PrimaryColorDark">#303f9f</color>
+    <color name="colorAccent">#f44336</color>
+    <color name="list_item_title">#333</color>
+    <color name="list_background">#eee</color>
+    <color name="list_background_pressed">#5c6bc0</color>
+    <color name="list_divider">#999</color>
+    <color name="counter_text_bg">#626262</color>
+    <color name="counter_text_color">#c5c4c4</color>
+    <color name="ab_txt_color">#fafafa</color>
+</resources>
