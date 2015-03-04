@@ -42,7 +42,8 @@
         </activity>
         <provider
             android:name=".ContentProviders.CartContract"
-            android:authorities="com.orpheusdroid.foodfunda.ContentProviders" >
+            android:authorities="com.orpheusdroid.foodfunda.ContentProviders"
+            android:exported="false" >
         </provider>
     </application>
 

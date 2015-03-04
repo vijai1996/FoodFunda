@@ -27,7 +27,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class Dbhelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
     private static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "weather.db";
+    public static final String DATABASE_NAME = "Cart.db";
     public Dbhelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -39,7 +39,7 @@ public class Dbhelper extends SQLiteOpenHelper {
                 CartContract.COLUMN_ID + " INTEGER PRIMARY KEY," +
                 CartContract.COLUMN_ITEM + " TEXT UNIQUE NOT NULL, " +
                 CartContract.COLUMN_ITEM_QUANTITY + " TEXT NOT NULL, " +
-                CartContract.COLUMN_ITEM_PRICE + " REAL NOT NULL, " +
+                CartContract.COLUMN_ITEM_PRICE + " REAL NOT NULL " +
                 " );";
         /*final String SQL_CREATE_WEATHER_TABLE = "CREATE TABLE " + WeatherEntry.TABLE_NAME + " (" +
                 // Why AutoIncrement here, and not above?
@@ -69,6 +69,8 @@ public class Dbhelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(SQL_CREATE_LOCATION_TABLE);*/
         sqLiteDatabase.execSQL(SQL_CREATE_CART_TABLE);
     }
+
+
    @Override
    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
         // This database is only a cache for online data, so its upgrade policy is

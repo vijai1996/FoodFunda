@@ -52,7 +52,7 @@ public class CartFragment extends Fragment implements LoaderManager.LoaderCallba
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.cart_fragment, container, false);
-        if (getActivity().getSharedPreferences(Prefs, Context.MODE_PRIVATE).getString(save, "").equals(""))
+        if (!getActivity().getSharedPreferences(Prefs, Context.MODE_PRIVATE).getBoolean(save, false))
             Alert("Enter your postal address");
         // Inflate the layout for this fragment
         return rootView;

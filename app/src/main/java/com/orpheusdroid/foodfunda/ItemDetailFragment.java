@@ -18,7 +18,8 @@
 package com.orpheusdroid.foodfunda;
 
 
-import android.content.Intent;
+import android.content.ContentValues;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
@@ -33,6 +34,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.orpheusdroid.foodfunda.ContentProviders.CartContract;
 import com.orpheusdroid.foodfunda.utility.InputFilterQty;
 
 
@@ -42,6 +44,7 @@ import com.orpheusdroid.foodfunda.utility.InputFilterQty;
 public class ItemDetailFragment extends Fragment implements View.OnClickListener{
     int id;
     private EditText qty;
+    private Uri cartURI;
 
     private String nutrition[] = {"Fat:17\nCalories:354\nCarbohydrates:29\nProteins:20",
             "Fat:1.9\nCalories:467\nCarbohydrates:98\nProteins:14",
@@ -59,6 +62,13 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
 
     }
 
+    @Override
+    public void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+        cartURI = (bundle == null) ? null : (Uri) bundle
+                .getParcelable(CartContract.CONTENT_ITEM_TYPE);
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,6 +79,17 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
         ((ActionBarActivity) getActivity()).getSupportActionBar().setTitle("Details");
 
         id = getArguments().getInt("position", 0);
+
+        Bundle extras = getActivity().getIntent().getExtras();
+
+        // check from the saved Instance
+
+        // Or passed from the other activity
+        if (extras != null) {
+            cartURI = extras
+                    .getParcelable(CartContract.CONTENT_ITEM_TYPE);
+        }
+
         /*title = getArguments().getString("title");
         price = getArguments().getInt("price");
         imageID = getArguments().getInt("image");*/
@@ -114,7 +135,20 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                 break;
             case R.id.add_to_cart:
                 Toast.makeText(getActivity(), "Added to cart", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getActivity(), CartActivity.class));
+                num = Integer.parseInt(qty.getText().toString());
+                //startActivity(new Intent(getActivity(), CartActivity.class));
+                getActivity().getContentResolver().delete(CartContract.CONTENT_URI, null, null);
+                ContentValues cv = new ContentValues();
+                cv.put(CartContract.COLUMN_ITEM, MenuFragment.title[id]);
+                cv.put(CartContract.COLUMN_ITEM_QUANTITY, num);
+                cv.put(CartContract.COLUMN_ITEM_PRICE, MenuFragment.price[id]*num);
+                //if (cartURI == null) {
+                    // New todo
+                    cartURI = getActivity().getContentResolver().insert(CartContract.CONTENT_URI, cv);
+                /*} else {
+                    // Update todo
+                    getActivity().getContentResolver().update(cartURI, cv, null, null);
+                }*/
                 break;
         }
     }

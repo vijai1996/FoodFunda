@@ -27,6 +27,8 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import com.orpheusdroid.foodfunda.utility.Debug;
+
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -119,6 +121,7 @@ public class CartContract extends ContentProvider {
         switch (uriType) {
             case CART:
                 id = sqlDB.insert(TABLE_NAME, null, values);
+                Debug.d("DB", "Inserted into db: " + uriType);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
