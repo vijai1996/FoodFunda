@@ -64,6 +64,10 @@ public class MainActivity extends ActionBarActivity {
             startActivity(new Intent(this, About.class));
             return true;
         }
+        if(id == R.id.ab_cart){
+            startActivity(new Intent(this, CartActivity.class));
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }

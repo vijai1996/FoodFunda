@@ -18,6 +18,7 @@
 package com.orpheusdroid.foodfunda;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -36,6 +37,8 @@ public class CartActivity extends ActionBarActivity {
 
         toolbar = (Toolbar) findViewById(R.id.appBar);
         setSupportActionBar(toolbar);
+        ActionBar ab = getSupportActionBar();
+        ab.setTitle("Cart");
 
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, new CartFragment())

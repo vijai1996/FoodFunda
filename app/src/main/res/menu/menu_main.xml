@@ -21,7 +21,7 @@
     tools:context=".MainActivity">
     <item
         android:id="@+id/ab_cart"
-        android:actionLayout="@layout/cart_with_badge"
+        android:icon="@drawable/ic_checkout"
         android:title="@string/action_cart"
         app:showAsAction="always" />
     <item
