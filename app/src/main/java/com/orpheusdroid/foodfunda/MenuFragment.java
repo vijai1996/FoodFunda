@@ -23,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import com.orpheusdroid.foodfunda.utility.Debug;
@@ -52,8 +53,10 @@ public class MenuFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
+        /*FrameLayout fram = (FrameLayout) getActivity().findViewById(R.id.container);
+        fram.setVisibility(View.GONE);*/
 
         lv = (ListView) rootView.findViewById(R.id.menu_items);
         ArrayList<MenuItems> MenuItems = new ArrayList<>();
@@ -67,6 +70,14 @@ public class MenuFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Debug.Toast(getActivity(), "Test");
+                int Frameview = -1;
+                if (MainActivity.mTwoPane)
+                    Frameview = R.id.menu_item_detail;
+                else {
+                    Frameview = R.id.container;
+                    FrameLayout frame = (FrameLayout) getActivity().findViewById(R.id.container);
+                    frame.setVisibility(View.VISIBLE);
+                }
                 ItemDetailFragment frag = new ItemDetailFragment();
                 Bundle args = new Bundle();
                         args.putInt("position", position);
@@ -75,7 +86,7 @@ public class MenuFragment extends Fragment {
                         args.putString("title", title[position]);
                 frag.setArguments(args);
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.container, frag)
+                        .add(Frameview, frag)
                         .addToBackStack("MenuFrag")
                         .commit();
                 /*Intent i = new Intent(getActivity(), ItemDetailActivity.class)

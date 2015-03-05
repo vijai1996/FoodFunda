@@ -20,15 +20,17 @@ package com.orpheusdroid.foodfunda;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.orpheusdroid.foodfunda.utility.Debug;
+
 
 public class MainActivity extends ActionBarActivity {
     private Toolbar toolbar;
+    public static boolean mTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +38,24 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         toolbar = (Toolbar) findViewById(R.id.appBar);
+        if (toolbar != null)
+            setSupportActionBar(toolbar);
 
-        setSupportActionBar(toolbar);
-        if (savedInstanceState == null) {
+        /*if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new MenuFragment())
                     .commit();
+        }*/
+        if (findViewById(R.id.menu_item_detail) != null){
+            mTwoPane = true;
+            Debug.v("View status:", "Not null");
+            if (savedInstanceState == null){
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.menu_item_detail, new ItemDetailFragment())
+                        .commit();
+            }
+        }else{
+
         }
     }
 
@@ -73,16 +87,5 @@ public class MainActivity extends ActionBarActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-
-        public PlaceholderFragment() {
-        }
-
-
     }
 }

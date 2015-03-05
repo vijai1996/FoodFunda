@@ -31,9 +31,9 @@ public class CartActivity extends ActionBarActivity {
     public static int imageID,price;
 
     @Override
-    protected void onCreate(Bundle savedInsstanceState){
-        super.onCreate(savedInsstanceState);
-        setContentView(R.layout.activity_main);
+    protected void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.cart_main);
 
         toolbar = (Toolbar) findViewById(R.id.appBar);
         setSupportActionBar(toolbar);
@@ -41,8 +41,7 @@ public class CartActivity extends ActionBarActivity {
         ab.setTitle("Cart");
 
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, new CartFragment())
-                .addToBackStack("ItemDetail")
+                .replace(R.id.container, new CartFragment())
                 .commit();
     }
 }

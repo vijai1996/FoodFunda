@@ -23,7 +23,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,7 +43,7 @@ import com.orpheusdroid.foodfunda.utility.InputFilterQty;
  * A simple {@link Fragment} subclass.
  */
 public class ItemDetailFragment extends Fragment implements View.OnClickListener{
-    int id;
+    int id=0;
     private EditText qty;
     private Uri cartURI;
 
@@ -78,9 +77,12 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.item_detail_fragment, container, false);
 
-        ((ActionBarActivity) getActivity()).getSupportActionBar().setTitle("Details");
+        //((ActionBarActivity) getActivity()).getSupportActionBar().setTitle("Details");
 
-        id = getArguments().getInt("position", 0);
+        Bundle args = getArguments();
+
+        if (args != null)
+            id = args.getInt("position", 0);
 
         Bundle extras = getActivity().getIntent().getExtras();
 

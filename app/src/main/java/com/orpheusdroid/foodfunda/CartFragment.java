@@ -45,6 +45,7 @@ public class CartFragment extends Fragment implements LoaderManager.LoaderCallba
     private String save = "SaveCB";
     private String NAME_TAG = "name";
     private String Prefs = "Address";
+    private View rootView;
 
     private TableLayout cart_itemsView;
 
@@ -60,12 +61,14 @@ public class CartFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.cart_fragment, container, false);
-        if (!getActivity().getSharedPreferences(Prefs, Context.MODE_PRIVATE).getBoolean(save, false))
-            Alert("Enter your postal address");
+        rootView = inflater.inflate(R.layout.cart_fragment, container, false);
+
         cart_itemsView = (TableLayout) rootView.findViewById(R.id.cart_items);
         cart_itemsView.setShrinkAllColumns(true);
         cart_itemsView.setStretchAllColumns(true);
+
+        if (!getActivity().getSharedPreferences(Prefs, Context.MODE_PRIVATE).getBoolean(save, false))
+            Alert("Enter your postal address");
 
         buildTable();
 
@@ -176,22 +179,40 @@ public class CartFragment extends Fragment implements LoaderManager.LoaderCallba
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(dialoglayout)
                 .setTitle(title)
-                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                .setNeutralButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         SharedPreferences sp = getActivity().getSharedPreferences(Prefs, Context.MODE_PRIVATE);
                         if (!name.getText().toString().equals("") && !addr.getText().toString().equals("")) {
                             sp.edit()
                                     .putString(NAME_TAG, name.getText().toString())
-                                    .putString(ADDRESS_TAG, addr.getText().toString()).commit();
+                                    .putString(ADDRESS_TAG, addr.getText().toString()).apply();
                             if (cb.isChecked())
                                 sp.edit()
-                                    .putBoolean(save, true)
-                                .commit();
+                                        .putBoolean(save, true)
+                                        .apply();
                         }
+                        //load();
                     }
                 })
+                /*.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        load();
+                    }
+                })*/
                 .show();
+    }
+
+    private void load() {
+        buildTable();
+
+        TextView address = (TextView) rootView.findViewById(R.id.address_tv);
+        address.setText(getActivity().getSharedPreferences(Prefs, Context.MODE_PRIVATE)
+                .getString(NAME_TAG, "")+
+                "\n"
+                + getActivity().getSharedPreferences(Prefs, Context.MODE_PRIVATE)
+                .getString(ADDRESS_TAG, ""));
     }
 
     @Override

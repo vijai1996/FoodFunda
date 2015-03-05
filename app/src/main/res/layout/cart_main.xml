@@ -1,4 +1,4 @@
-<!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<?xml version="1.0" encoding="utf-8"?><!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   % Copyright (c) 2015. Vijai Chandra Prasad R.                                                   %
   %                                                                                               %
   % This program is free software: you can redistribute it and/or modify                          %
@@ -14,53 +14,20 @@
   % You should have received a copy of the GNU General Public License                             %
   % along with this program.  If not, see http://www.gnu.org/licenses                             %
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.orpheusdroid.foodfunda.CartFragment">
+    android:orientation="vertical">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TableLayout
-        android:id="@+id/cart_items"
+    <include
+        android:id="@+id/appBar"
+        layout="@layout/app_bar" />
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:orientation="vertical"
-        />
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="25dp"
-        android:textStyle="bold"
-        android:text="@string/Address"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/address_tv"/>
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingBottom="15dp">
-
-        <ImageView
-            android:id="@+id/fab_image_button"
-            android:layout_width="@dimen/fab_button_diameter"
-            android:layout_height="@dimen/fab_button_diameter"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/fab_button_margin_bottom"
-            android:layout_marginRight="@dimen/fab_button_margin_right"
-            android:background="@drawable/fab_shape"
-            android:src="@drawable/ic_addcart"
-            android:tint="@android:color/white"/> />
-
-    </RelativeLayout>
-
+        android:layout_height="match_parent"
+        tools:context="com.orpheusdroid.foodfunda.CartActivity"
+        tools:ignore="MergeRootFrame" />
 </LinearLayout>
