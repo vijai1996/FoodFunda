@@ -18,6 +18,7 @@
 package com.orpheusdroid.foodfunda;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
@@ -60,15 +61,17 @@ public class MainActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_about) {
-            startActivity(new Intent(this, About.class));
-            return true;
+        switch (id){
+            case R.id.action_about:
+                startActivity(new Intent(this, About.class));
+                break;
+            case R.id.ab_cart:
+                startActivity(new Intent(this, CartActivity.class));
+                break;
+            case R.id.map:
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps?q=loc:12.9846915,80.2129798(Mirchi)")));
+                break;
         }
-        if(id == R.id.ab_cart){
-            startActivity(new Intent(this, CartActivity.class));
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 

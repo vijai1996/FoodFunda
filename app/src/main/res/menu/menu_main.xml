@@ -29,4 +29,10 @@
         android:orderInCategory="100"
         android:title="@string/action_about"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/map"
+        android:icon="@android:drawable/ic_dialog_map"
+        android:title="Location"
+        app:showAsAction="never"
+        android:orderInCategory="1" />
 </menu>
