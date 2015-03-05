@@ -37,10 +37,10 @@ public class Dbhelper extends SQLiteOpenHelper {
         // location setting, the city name, and the latitude and longitude
         final String SQL_CREATE_CART_TABLE = "CREATE TABLE " + CartContract.TABLE_NAME + " (" +
                 CartContract.COLUMN_ID + " INTEGER PRIMARY KEY," +
-                CartContract.COLUMN_ITEM + " TEXT UNIQUE NOT NULL, " +
+                CartContract.COLUMN_ITEM + " TEXT NOT NULL, " +
                 CartContract.COLUMN_ITEM_QUANTITY + " TEXT NOT NULL, " +
-                CartContract.COLUMN_ITEM_PRICE + " REAL NOT NULL " +
-                " );";
+                CartContract.COLUMN_ITEM_PRICE + " REAL NOT NULL, " +
+                "UNIQUE (" + CartContract.COLUMN_ITEM + " ) ON CONFLICT REPLACE);";
         /*final String SQL_CREATE_WEATHER_TABLE = "CREATE TABLE " + WeatherEntry.TABLE_NAME + " (" +
                 // Why AutoIncrement here, and not above?
                 // Unique keys will be auto-generated in either case. But for weather

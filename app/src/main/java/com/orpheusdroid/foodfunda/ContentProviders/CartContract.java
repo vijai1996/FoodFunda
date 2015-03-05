@@ -116,8 +116,8 @@ public class CartContract extends ContentProvider {
     public Uri insert(Uri uri, ContentValues values) {
         int uriType = sURIMatcher.match(uri);
         SQLiteDatabase sqlDB = database.getWritableDatabase();
-        int rowsDeleted = 0;
-        long id = 0;
+        //int rowsDeleted = 0;
+        long id;
         switch (uriType) {
             case CART:
                 id = sqlDB.insert(TABLE_NAME, null, values);
@@ -134,7 +134,7 @@ public class CartContract extends ContentProvider {
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         int uriType = sURIMatcher.match(uri);
         SQLiteDatabase sqlDB = database.getWritableDatabase();
-        int rowsDeleted = 0;
+        int rowsDeleted;
         switch (uriType) {
             case CART:
                 rowsDeleted = sqlDB.delete(TABLE_NAME, selection,

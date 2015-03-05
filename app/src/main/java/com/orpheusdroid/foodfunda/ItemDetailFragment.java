@@ -19,6 +19,7 @@ package com.orpheusdroid.foodfunda;
 
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -35,6 +36,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.orpheusdroid.foodfunda.ContentProviders.CartContract;
+import com.orpheusdroid.foodfunda.utility.Debug;
 import com.orpheusdroid.foodfunda.utility.InputFilterQty;
 
 
@@ -137,7 +139,7 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                 Toast.makeText(getActivity(), "Added to cart", Toast.LENGTH_SHORT).show();
                 num = Integer.parseInt(qty.getText().toString());
                 //startActivity(new Intent(getActivity(), CartActivity.class));
-                getActivity().getContentResolver().delete(CartContract.CONTENT_URI, null, null);
+                //getActivity().getContentResolver().delete(CartContract.CONTENT_URI, null, null);
                 ContentValues cv = new ContentValues();
                 cv.put(CartContract.COLUMN_ITEM, MenuFragment.title[id]);
                 cv.put(CartContract.COLUMN_ITEM_QUANTITY, num);
@@ -151,5 +153,17 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                 }*/
                 break;
         }
+    }
+
+    private boolean checkCart() {
+        Cursor cursor = getActivity().getContentResolver().query(CartContract.CONTENT_URI, null, null, null, null);
+        String item = "";
+        if (cursor.moveToFirst()) {
+            while (!cursor.moveToNext())
+                item += cursor.getString(cursor.getColumnIndex(CartContract.COLUMN_ITEM)) + "\n";
+            Debug.d("Column item value", item);
+            return true;
+        }
+         return false;
     }
 }
