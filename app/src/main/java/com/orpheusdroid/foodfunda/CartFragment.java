@@ -33,14 +33,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.orpheusdroid.foodfunda.ContentProviders.CartContract;
+import com.orpheusdroid.foodfunda.utility.Debug;
 
 
-public class CartFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class CartFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener{
     private String ADDRESS_TAG = "PostalAddr";
     private String save = "SaveCB";
     private String NAME_TAG = "name";
@@ -62,6 +64,8 @@ public class CartFragment extends Fragment implements LoaderManager.LoaderCallba
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.cart_fragment, container, false);
+        ImageButton checkout = (ImageButton) rootView.findViewById(R.id.cart_checkout);
+        checkout.setOnClickListener(this);
 
         cart_itemsView = (TableLayout) rootView.findViewById(R.id.cart_items);
         cart_itemsView.setShrinkAllColumns(true);
@@ -228,5 +232,11 @@ public class CartFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == R.id.cart_checkout)
+            Debug.Toast(getActivity(), "Checkout pressed");
     }
 }

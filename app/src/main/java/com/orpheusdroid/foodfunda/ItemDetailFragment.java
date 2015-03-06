@@ -148,7 +148,8 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                 cv.put(CartContract.COLUMN_ITEM_PRICE, MenuFragment.price[id]*num);
                 //if (cartURI == null) {
                     // New todo
-                    cartURI = getActivity().getContentResolver().insert(CartContract.CONTENT_URI, cv);
+                cartURI = getActivity().getContentResolver().insert(CartContract.CONTENT_URI, cv);
+                ((MainActivity)getActivity()).updateBadge();
                 /*} else {
                     // Update todo
                     getActivity().getContentResolver().update(cartURI, cv, null, null);
