@@ -17,6 +17,8 @@
 
 package com.orpheusdroid.foodfunda;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -77,7 +79,20 @@ public class MainActivity extends ActionBarActivity {
         count.findViewById(R.id.cart_img).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), CartActivity.class));
+                if (cart_count != 0)
+                    startActivity(new Intent(getApplicationContext(), CartActivity.class));
+                else{
+                    AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+                    alert.setTitle("Cart Empty")
+                            .setMessage("Seems like you are not hungry?")
+                            .setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            })
+                            .show();
+                }
             }
         });
         ActionBar ab = getSupportActionBar();

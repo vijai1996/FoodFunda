@@ -23,6 +23,8 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -201,12 +203,6 @@ public class CartFragment extends Fragment implements LoaderManager.LoaderCallba
                         //load();
                     }
                 })
-                /*.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        load();
-                    }
-                })*/
                 .show();
     }
 
@@ -262,7 +258,27 @@ public class CartFragment extends Fragment implements LoaderManager.LoaderCallba
             }
             Debug.v("JSON ARRAY: ", orderJSON.toString());
             String data[] = {orderJSON.toString(), Integer.toString(total)};
-            new PostMenu(getActivity()).execute(data);
+            if(isNetworkAvailable() && cursor.getCount() != 0)
+                new PostMenu(getActivity()).execute(data);
+            else if (!isNetworkAvailable()){
+                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                alert.setTitle("Internet connection not available")
+                        .setMessage("Not able to connect to internet. Please check your connection and try again")
+                        .setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .show();
+            }
         }
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

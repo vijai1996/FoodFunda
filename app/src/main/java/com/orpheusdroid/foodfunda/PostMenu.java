@@ -17,8 +17,10 @@
 
 package com.orpheusdroid.foodfunda;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 
 import com.orpheusdroid.foodfunda.ContentProviders.CartContract;
@@ -102,7 +104,20 @@ public class PostMenu extends AsyncTask<String[], Void, String> {
     @Override
     protected void onPostExecute(String response){
         progress.cancel();
-        if (Integer.parseInt(response) == 200)
+        if (Integer.parseInt(response) == 200) {
             mContext.getContentResolver().delete(CartContract.CONTENT_URI, null, null);
+        }
+        else {
+            AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
+            alert.setTitle("Error while checkout")
+                    .setMessage("An error has occured while checkingout with response code: "+ Integer.parseInt(response))
+                    .setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    })
+                    .show();
+        }
     }
 }
