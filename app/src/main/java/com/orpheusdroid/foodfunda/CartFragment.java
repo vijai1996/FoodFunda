@@ -20,7 +20,6 @@ package com.orpheusdroid.foodfunda;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
@@ -34,8 +33,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -76,7 +73,7 @@ public class CartFragment extends Fragment implements LoaderManager.LoaderCallba
         cart_itemsView.setStretchAllColumns(true);
 
         if (!getActivity().getSharedPreferences(CartActivity.Prefs, Context.MODE_PRIVATE).getBoolean(CartActivity.save, false))
-            Alert("Enter your postal address");
+            ((CartActivity)getActivity()).Alert("Enter your postal address");
 
         buildTable();
 
@@ -175,35 +172,6 @@ public class CartFragment extends Fragment implements LoaderManager.LoaderCallba
             cart_itemsView.addView(row);
         }
 
-    }
-
-    private void Alert(String title) {
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        final View dialoglayout = inflater.inflate(R.layout.cart, null);
-        final EditText name = (EditText) dialoglayout.findViewById(R.id.name);
-        final EditText addr = (EditText) dialoglayout.findViewById(R.id.addr);
-        final CheckBox cb = (CheckBox) dialoglayout.findViewById(R.id.cb_save);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setView(dialoglayout)
-                .setTitle(title)
-                .setNeutralButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        SharedPreferences sp = getActivity().getSharedPreferences(CartActivity.Prefs, Context.MODE_PRIVATE);
-                        if (!name.getText().toString().equals("") && !addr.getText().toString().equals("")) {
-                            sp.edit()
-                                    .putString(CartActivity.NAME_TAG, name.getText().toString())
-                                    .putString(CartActivity.ADDRESS_TAG, addr.getText().toString()).apply();
-                            if (cb.isChecked())
-                                sp.edit()
-                                        .putBoolean(CartActivity.save, true)
-                                        .apply();
-                        }
-                        //load();
-                    }
-                })
-                .show();
     }
 
     private void load() {

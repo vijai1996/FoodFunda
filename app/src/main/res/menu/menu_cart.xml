@@ -16,25 +16,19 @@
   % along with this program.  If not, see http://www.gnu.org/licenses                             %
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="20dp"
-    android:orientation="vertical">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/cart_clear"
+        android:title="Clear cart"
+        app:showAsAction="never"
+        android:orderInCategory="1"
+        />
+    <item
+        android:id="@+id/address"
+        android:title="Change Address"
+        app:showAsAction="never"
+        android:orderInCategory="2"
+        />
 
-    <EditText
-        android:id="@+id/name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:hint="Enter your name"
-        android:maxLines="1"/>
-    <EditText
-        android:id="@+id/addr"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPostalAddress|textMultiLine"
-        android:hint="Enter your postal address"
-        android:maxLines="5"/>
-
-</LinearLayout>
+</menu>
