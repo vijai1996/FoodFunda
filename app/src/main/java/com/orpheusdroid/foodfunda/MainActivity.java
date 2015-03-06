@@ -18,19 +18,25 @@
 package com.orpheusdroid.foodfunda;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
+import com.orpheusdroid.foodfunda.ContentProviders.CartContract;
 import com.orpheusdroid.foodfunda.utility.Debug;
 
 
 public class MainActivity extends ActionBarActivity {
     private Toolbar toolbar;
     public static boolean mTwoPane;
+    int cart_count;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +52,7 @@ public class MainActivity extends ActionBarActivity {
                     .add(R.id.container, new MenuFragment())
                     .commit();
         }*/
+        updateBadge();
         if (findViewById(R.id.menu_item_detail) != null){
             mTwoPane = true;
             Debug.v("View status:", "Not null");
@@ -64,7 +71,20 @@ public class MainActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        View count = menu.findItem(R.id.ab_cart).getActionView();
+        TextView notifCount = (TextView) count.findViewById(R.id.count_badge);
+        notifCount.setText(String.valueOf(cart_count));
+        count.findViewById(R.id.cart_img).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), CartActivity.class));
+            }
+        });
+        ActionBar ab = getSupportActionBar();
+        if (ab!=null)
+            ab.setCustomView(count);
+        return super.onCreateOptionsMenu(menu);
+        //return true;
     }
 
     @Override
@@ -87,5 +107,15 @@ public class MainActivity extends ActionBarActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+    public void updateBadge(){
+        Cursor cursor = getContentResolver().query(CartContract.CONTENT_URI, null, null, null, null);
+        cart_count =  cursor.getCount();
+        invalidateOptionsMenu();
+    }
+
+    public void clickEvent(View v){
+        if (v.getId() == R.id.cart_img)
+            startActivity(new Intent(this, CartActivity.class));
     }
 }

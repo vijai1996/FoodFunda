@@ -23,6 +23,7 @@
         android:id="@+id/ab_cart"
         android:icon="@drawable/ic_checkout"
         android:title="@string/action_cart"
+        app:actionLayout="@layout/cart_with_badge"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_about"

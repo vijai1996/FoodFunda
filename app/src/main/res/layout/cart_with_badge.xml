@@ -17,20 +17,26 @@
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="48dp"
+    android:layout_width="wrap_content"
     android:layout_height="fill_parent"
-    android:layout_gravity="right" >
+    android:layout_gravity="right"
+    android:clickable="true"
+    style="@android:style/Widget.ActionButton" >
 
-    <ImageView
+    <ImageButton
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
         android:id="@+id/cart_img"
         android:clickable="true"
+        android:background="@android:color/transparent"
         android:src="@drawable/ic_checkout"/>
     <TextView
+        android:id="@+id/count_badge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="3dp"
+        android:textStyle="bold"
         android:textColor="@color/colorAccent"
         android:text="0"
         android:layout_alignParentTop="true"
