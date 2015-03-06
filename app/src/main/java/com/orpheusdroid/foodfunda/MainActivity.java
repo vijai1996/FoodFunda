@@ -113,9 +113,4 @@ public class MainActivity extends ActionBarActivity {
         cart_count =  cursor.getCount();
         invalidateOptionsMenu();
     }
-
-    public void clickEvent(View v){
-        if (v.getId() == R.id.cart_img)
-            startActivity(new Intent(this, CartActivity.class));
-    }
 }
