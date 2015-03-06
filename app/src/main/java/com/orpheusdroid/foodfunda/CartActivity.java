@@ -26,6 +26,11 @@ import android.support.v7.widget.Toolbar;
  * Created by vijai on 24-02-2015.
  */
 public class CartActivity extends ActionBarActivity {
+    public static String ADDRESS_TAG = "PostalAddr";
+    public static String save = "SaveCB";
+    public static String NAME_TAG = "name";
+    public static String Prefs = "Address";
+
     Toolbar toolbar;
     public String title;
     public static int imageID,price;

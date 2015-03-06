@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,13 +42,14 @@ import android.widget.TextView;
 import com.orpheusdroid.foodfunda.ContentProviders.CartContract;
 import com.orpheusdroid.foodfunda.utility.Debug;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public class CartFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener{
-    private String ADDRESS_TAG = "PostalAddr";
-    private String save = "SaveCB";
-    private String NAME_TAG = "name";
-    private String Prefs = "Address";
     private View rootView;
+    private int total;
 
     private TableLayout cart_itemsView;
 
@@ -71,17 +73,17 @@ public class CartFragment extends Fragment implements LoaderManager.LoaderCallba
         cart_itemsView.setShrinkAllColumns(true);
         cart_itemsView.setStretchAllColumns(true);
 
-        if (!getActivity().getSharedPreferences(Prefs, Context.MODE_PRIVATE).getBoolean(save, false))
+        if (!getActivity().getSharedPreferences(CartActivity.Prefs, Context.MODE_PRIVATE).getBoolean(CartActivity.save, false))
             Alert("Enter your postal address");
 
         buildTable();
 
         TextView address = (TextView) rootView.findViewById(R.id.address_tv);
-        address.setText(getActivity().getSharedPreferences(Prefs, Context.MODE_PRIVATE)
-                .getString(NAME_TAG, "")+
+        address.setText(getActivity().getSharedPreferences(CartActivity.Prefs, Context.MODE_PRIVATE)
+                .getString(CartActivity.NAME_TAG, "")+
                 "\n"
-                + getActivity().getSharedPreferences(Prefs, Context.MODE_PRIVATE)
-                .getString(ADDRESS_TAG, ""));
+                + getActivity().getSharedPreferences(CartActivity.Prefs, Context.MODE_PRIVATE)
+                .getString(CartActivity.ADDRESS_TAG, ""));
         // Inflate the layout for this fragment
         return rootView;
     }
@@ -89,7 +91,7 @@ public class CartFragment extends Fragment implements LoaderManager.LoaderCallba
     public void buildTable(){
         Cursor cursor = getActivity().getContentResolver().query(CartContract.CONTENT_URI, null, null, null, null);
         int count = cursor.getCount();
-        int total=0;
+
 
         TableRow rowProdLabels = new TableRow(this.getActivity());
 
@@ -186,14 +188,14 @@ public class CartFragment extends Fragment implements LoaderManager.LoaderCallba
                 .setNeutralButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        SharedPreferences sp = getActivity().getSharedPreferences(Prefs, Context.MODE_PRIVATE);
+                        SharedPreferences sp = getActivity().getSharedPreferences(CartActivity.Prefs, Context.MODE_PRIVATE);
                         if (!name.getText().toString().equals("") && !addr.getText().toString().equals("")) {
                             sp.edit()
-                                    .putString(NAME_TAG, name.getText().toString())
-                                    .putString(ADDRESS_TAG, addr.getText().toString()).apply();
+                                    .putString(CartActivity.NAME_TAG, name.getText().toString())
+                                    .putString(CartActivity.ADDRESS_TAG, addr.getText().toString()).apply();
                             if (cb.isChecked())
                                 sp.edit()
-                                        .putBoolean(save, true)
+                                        .putBoolean(CartActivity.save, true)
                                         .apply();
                         }
                         //load();
@@ -212,11 +214,11 @@ public class CartFragment extends Fragment implements LoaderManager.LoaderCallba
         buildTable();
 
         TextView address = (TextView) rootView.findViewById(R.id.address_tv);
-        address.setText(getActivity().getSharedPreferences(Prefs, Context.MODE_PRIVATE)
-                .getString(NAME_TAG, "")+
+        address.setText(getActivity().getSharedPreferences(CartActivity.Prefs, Context.MODE_PRIVATE)
+                .getString(CartActivity.NAME_TAG, "")+
                 "\n"
-                + getActivity().getSharedPreferences(Prefs, Context.MODE_PRIVATE)
-                .getString(ADDRESS_TAG, ""));
+                + getActivity().getSharedPreferences(CartActivity.Prefs, Context.MODE_PRIVATE)
+                .getString(CartActivity.ADDRESS_TAG, ""));
     }
 
     @Override
@@ -236,7 +238,31 @@ public class CartFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.cart_checkout)
+        if(v.getId() == R.id.cart_checkout) {
             Debug.Toast(getActivity(), "Checkout pressed");
+            Cursor cursor = getActivity().getContentResolver().query(CartContract.CONTENT_URI, null, null, null, null);
+            JSONArray itemJson = new JSONArray();
+            cursor.moveToFirst();
+            while(cursor.moveToNext()){
+                JSONObject orderOBJ = new JSONObject();
+                try{
+                    orderOBJ.put("item", cursor.getString(cursor.getColumnIndex(CartContract.COLUMN_ITEM)));
+                    orderOBJ.put("qty", cursor.getInt(cursor.getColumnIndex(CartContract.COLUMN_ITEM_QUANTITY)));
+                    orderOBJ.put("price", cursor.getInt(cursor.getColumnIndex(CartContract.COLUMN_ITEM_PRICE)));
+                    itemJson.put(orderOBJ);
+                }catch (JSONException e) {
+                    Log.e("JSON ENCODE ERROR: ", e.toString());
+                }
+            }
+            JSONObject orderJSON = new JSONObject();
+            try {
+                orderJSON.put("order", itemJson);
+            }catch (JSONException e){
+                e.printStackTrace();
+            }
+            Debug.v("JSON ARRAY: ", orderJSON.toString());
+            String data[] = {orderJSON.toString(), Integer.toString(total)};
+            new PostMenu(getActivity()).execute(data);
+        }
     }
 }
