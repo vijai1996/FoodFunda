@@ -20,6 +20,7 @@ package com.orpheusdroid.foodfunda;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
@@ -31,8 +32,12 @@ import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -67,6 +72,8 @@ public class CartFragment extends Fragment implements LoaderManager.LoaderCallba
         rootView = inflater.inflate(R.layout.cart_fragment, container, false);
         ImageButton checkout = (ImageButton) rootView.findViewById(R.id.cart_checkout);
         checkout.setOnClickListener(this);
+
+        setHasOptionsMenu(true);
 
         cart_itemsView = (TableLayout) rootView.findViewById(R.id.cart_items);
         cart_itemsView.setShrinkAllColumns(true);
@@ -174,15 +181,60 @@ public class CartFragment extends Fragment implements LoaderManager.LoaderCallba
 
     }
 
-    private void load() {
-        buildTable();
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getActivity().getMenuInflater().inflate(R.menu.menu_cart, menu);
+        //return true;
+    }
 
-        TextView address = (TextView) rootView.findViewById(R.id.address_tv);
-        address.setText(getActivity().getSharedPreferences(CartActivity.Prefs, Context.MODE_PRIVATE)
-                .getString(CartActivity.NAME_TAG, "")+
-                "\n"
-                + getActivity().getSharedPreferences(CartActivity.Prefs, Context.MODE_PRIVATE)
-                .getString(CartActivity.ADDRESS_TAG, ""));
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.cart_clear:
+                getActivity().getContentResolver().delete(CartContract.CONTENT_URI, null, null);
+                ((MainActivity) getActivity()).updateBadge();
+                break;
+            case R.id.address:
+                Alert("Enter your postal address");
+                break;
+        }
+
+        return true;
+    }
+
+    public void Alert(String title) {
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        final View dialoglayout = inflater.inflate(R.layout.cart, null);
+        final EditText name = (EditText) dialoglayout.findViewById(R.id.name);
+        final EditText addr = (EditText) dialoglayout.findViewById(R.id.addr);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setView(dialoglayout)
+                .setTitle(title)
+                .setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SharedPreferences sp = getActivity().getSharedPreferences(CartActivity.Prefs, Context.MODE_PRIVATE);
+                        if (!name.getText().toString().equals("") && !addr.getText().toString().equals("")) {
+                            sp.edit()
+                                    .putString(CartActivity.NAME_TAG, name.getText().toString())
+                                    .putString(CartActivity.ADDRESS_TAG, addr.getText().toString()).apply();
+
+                            sp.edit()
+                                    .putBoolean(CartActivity.save, true)
+                                    .apply();
+                        }
+                        //load();
+                    }
+                })
+                .show();
     }
 
     @Override
@@ -203,44 +255,66 @@ public class CartFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.cart_checkout) {
-            Debug.Toast(getActivity(), "Checkout pressed");
-            Cursor cursor = getActivity().getContentResolver().query(CartContract.CONTENT_URI, null, null, null, null);
-            JSONArray itemJson = new JSONArray();
-            cursor.moveToFirst();
-            while(cursor.moveToNext()){
-                JSONObject orderOBJ = new JSONObject();
-                try{
-                    orderOBJ.put("item", cursor.getString(cursor.getColumnIndex(CartContract.COLUMN_ITEM)));
-                    orderOBJ.put("qty", cursor.getInt(cursor.getColumnIndex(CartContract.COLUMN_ITEM_QUANTITY)));
-                    orderOBJ.put("price", cursor.getInt(cursor.getColumnIndex(CartContract.COLUMN_ITEM_PRICE)));
-                    itemJson.put(orderOBJ);
-                }catch (JSONException e) {
-                    Log.e("JSON ENCODE ERROR: ", e.toString());
-                }
-            }
-            JSONObject orderJSON = new JSONObject();
-            try {
-                orderJSON.put("order", itemJson);
-            }catch (JSONException e){
-                e.printStackTrace();
-            }
-            Debug.v("JSON ARRAY: ", orderJSON.toString());
-            String data[] = {orderJSON.toString(), Integer.toString(total)};
-            if(isNetworkAvailable() && cursor.getCount() != 0)
-                new PostMenu(getActivity()).execute(data);
-            else if (!isNetworkAvailable()){
-                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                alert.setTitle("Internet connection not available")
-                        .setMessage("Not able to connect to internet. Please check your connection and try again")
-                        .setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
+            AlertDialog.Builder checkout = new AlertDialog.Builder(getActivity());
+            checkout.setTitle("Are you sure to place the order?")
+                    .setMessage("Are you sure you want to place the order? It cannot be cancel untill" +
+                                    "you call the restaurant. Order total: ₹"+ total)
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
-                            }
-                        })
-                        .show();
+                        }
+                    })
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Checkout();
+                        }
+                    })
+                    .show();
+            Debug.Toast(getActivity(), "Checkout pressed");
+        }
+    }
+
+    private void Checkout() {
+        Cursor cursor = getActivity().getContentResolver().query(CartContract.CONTENT_URI, null, null, null, null);
+        JSONArray itemJson = new JSONArray();
+        cursor.moveToFirst();
+        while(cursor.moveToNext()){
+            JSONObject orderOBJ = new JSONObject();
+            try{
+                orderOBJ.put("item", cursor.getString(cursor.getColumnIndex(CartContract.COLUMN_ITEM)));
+                orderOBJ.put("qty", cursor.getInt(cursor.getColumnIndex(CartContract.COLUMN_ITEM_QUANTITY)));
+                orderOBJ.put("price", cursor.getInt(cursor.getColumnIndex(CartContract.COLUMN_ITEM_PRICE)));
+                itemJson.put(orderOBJ);
+            }catch (JSONException e) {
+                Log.e("JSON ENCODE ERROR: ", e.toString());
             }
         }
+        JSONObject orderJSON = new JSONObject();
+        try {
+            orderJSON.put("order", itemJson);
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+        Debug.v("JSON ARRAY: ", orderJSON.toString());
+        String data[] = {orderJSON.toString(), Integer.toString(total)};
+        if(isNetworkAvailable() && cursor.getCount() != 0) {
+            new PostMenu(getActivity()).execute(data);
+        }
+        else if (!isNetworkAvailable()) {
+            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+            alert.setTitle("Internet connection not available")
+                    .setMessage("Not able to connect to internet. Please check your connection and try again")
+                    .setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    })
+                    .show();
+        }
+
     }
 
     private boolean isNetworkAvailable() {

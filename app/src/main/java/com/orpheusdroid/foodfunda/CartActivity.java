@@ -29,7 +29,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.orpheusdroid.foodfunda.ContentProviders.CartContract;
@@ -93,7 +92,6 @@ public class CartActivity extends ActionBarActivity {
         final View dialoglayout = inflater.inflate(R.layout.cart, null);
         final EditText name = (EditText) dialoglayout.findViewById(R.id.name);
         final EditText addr = (EditText) dialoglayout.findViewById(R.id.addr);
-        final CheckBox cb = (CheckBox) dialoglayout.findViewById(R.id.cb_save);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(dialoglayout)

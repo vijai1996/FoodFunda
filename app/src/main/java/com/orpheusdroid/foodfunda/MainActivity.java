@@ -29,6 +29,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.orpheusdroid.foodfunda.ContentProviders.CartContract;
@@ -39,6 +40,7 @@ public class MainActivity extends ActionBarActivity {
     private Toolbar toolbar;
     public static boolean mTwoPane;
     int cart_count;
+    FrameLayout frame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,8 @@ public class MainActivity extends ActionBarActivity {
         toolbar = (Toolbar) findViewById(R.id.appBar);
         if (toolbar != null)
             setSupportActionBar(toolbar);
+
+        frame = (FrameLayout) findViewById(R.id.container);
 
         /*if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
@@ -79,8 +83,14 @@ public class MainActivity extends ActionBarActivity {
         count.findViewById(R.id.cart_img).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (cart_count != 0)
-                    startActivity(new Intent(getApplicationContext(), CartActivity.class));
+                if (cart_count != 0) {
+                    //startActivity(new Intent(getApplicationContext(), CartActivity.class));
+                    frame.setVisibility(View.VISIBLE);
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.container, new CartFragment())
+                            .addToBackStack(null)
+                            .commit();
+                }
                 else{
                     AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
                     alert.setTitle("Cart Empty")
