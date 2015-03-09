@@ -73,7 +73,7 @@ public class PostMenu extends AsyncTask<String[], Void, String> {
         HttpClient httpClient = new DefaultHttpClient();
 
 
-        HttpPost httpPost = new HttpPost("http://192.168.0.108/food/insert.php");
+        HttpPost httpPost = new HttpPost("http://orpheusdroid.com/mirchi/insert.php");
         HttpResponse response = null;
 
         List<NameValuePair> data = new ArrayList<NameValuePair>(4);

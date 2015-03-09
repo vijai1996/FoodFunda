@@ -280,7 +280,7 @@ public class CartFragment extends Fragment implements LoaderManager.LoaderCallba
         Cursor cursor = getActivity().getContentResolver().query(CartContract.CONTENT_URI, null, null, null, null);
         JSONArray itemJson = new JSONArray();
         cursor.moveToFirst();
-        while(cursor.moveToNext()){
+        do{
             JSONObject orderOBJ = new JSONObject();
             try{
                 orderOBJ.put("item", cursor.getString(cursor.getColumnIndex(CartContract.COLUMN_ITEM)));
@@ -290,7 +290,7 @@ public class CartFragment extends Fragment implements LoaderManager.LoaderCallba
             }catch (JSONException e) {
                 Log.e("JSON ENCODE ERROR: ", e.toString());
             }
-        }
+        }while(cursor.moveToNext());
         JSONObject orderJSON = new JSONObject();
         try {
             orderJSON.put("order", itemJson);

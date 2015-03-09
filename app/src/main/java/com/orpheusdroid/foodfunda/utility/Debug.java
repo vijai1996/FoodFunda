@@ -25,17 +25,20 @@ import android.widget.Toast;
  * Created by vijai on 24-02-2015.
  */
 public class Debug {
-    int verbose = 1;
+    private static final int verbose = 0;
 
-    public static void v(String TAG, String Message){
-        Log.v(TAG,Message);
+    public static void v(String TAG, String Message) {
+        if (verbose == 1)
+            Log.v(TAG, Message);
     }
 
-    public static void Toast(Context context, String Message){
-        Toast.makeText(context, Message, Toast.LENGTH_SHORT).show();
+    public static void Toast(Context context, String Message) {
+        if (verbose == 1)
+            Toast.makeText(context, Message, Toast.LENGTH_SHORT).show();
     }
 
-    public static void d(String TAG, String Message){
-        Log.d(TAG, Message);
+    public static void d(String TAG, String Message) {
+        if (verbose == 1)
+            Log.d(TAG, Message);
     }
 }
