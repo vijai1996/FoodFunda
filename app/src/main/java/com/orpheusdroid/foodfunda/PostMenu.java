@@ -108,8 +108,7 @@ public class PostMenu extends AsyncTask<String[], Void, String> {
         if (Integer.parseInt(response) == 200) {
             mContext.getContentResolver().delete(CartContract.CONTENT_URI, null, null);
             ((MainActivity) mContext).updateBadge();
-            ((MainActivity) mContext).getFragmentManager().popBackStackImmediate()
-            ;
+            ((MainActivity) mContext).getFragmentManager().popBackStackImmediate();
         }
         else {
             AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
