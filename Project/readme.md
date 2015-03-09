@@ -1,0 +1,1 @@
+All ordered items can be viewed as a json output at https://orpheusdroid.com/mirchi/json.php
