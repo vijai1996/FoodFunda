@@ -40,6 +40,7 @@ import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.orpheusdroid.foodfunda.ContentProviders.CartContract;
 import com.orpheusdroid.foodfunda.utility.Debug;
@@ -78,7 +79,7 @@ public class CartFragment extends Fragment implements View.OnClickListener{
         cart_itemsView.setStretchAllColumns(true);
 
         if (!getActivity().getSharedPreferences(CartActivity.Prefs, Context.MODE_PRIVATE).getBoolean(CartActivity.save, false))
-            ((CartActivity)getActivity()).Alert("Enter your postal address");
+            Alert("Enter your postal address");
 
         buildTable();
 
@@ -223,11 +224,12 @@ public class CartFragment extends Fragment implements View.OnClickListener{
                         if (!name.getText().toString().equals("") && !addr.getText().toString().equals("")) {
                             sp.edit()
                                     .putString(CartActivity.NAME_TAG, name.getText().toString())
-                                    .putString(CartActivity.ADDRESS_TAG, addr.getText().toString()).apply();
-
-                            sp.edit()
+                                    .putString(CartActivity.ADDRESS_TAG, addr.getText().toString())
                                     .putBoolean(CartActivity.save, true)
                                     .apply();
+                        } else {
+                            Toast.makeText(getActivity(), "Name and Address cannot be left empty", Toast.LENGTH_SHORT).show();
+                            Alert("Enter your postal address");
                         }
                         //load();
                     }
