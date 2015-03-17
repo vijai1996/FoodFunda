@@ -27,8 +27,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -51,7 +49,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class CartFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener{
+public class CartFragment extends Fragment implements View.OnClickListener{
     private View rootView;
     private int total;
 
@@ -235,21 +233,6 @@ public class CartFragment extends Fragment implements LoaderManager.LoaderCallba
                     }
                 })
                 .show();
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return null;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-
     }
 
     @Override
