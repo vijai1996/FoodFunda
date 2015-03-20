@@ -21,6 +21,8 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 
 import com.orpheusdroid.foodfunda.ContentProviders.CartContract;
@@ -104,16 +106,38 @@ public class PostMenu extends AsyncTask<String[], Void, String> {
 
     @Override
     protected void onPostExecute(String response){
-        progress.cancel();
+        AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
+
         if (Integer.parseInt(response) == 200) {
             mContext.getContentResolver().delete(CartContract.CONTENT_URI, null, null);
             ((MainActivity) mContext).updateBadge();
             ((MainActivity) mContext).getFragmentManager().popBackStackImmediate();
+            alert.setTitle("You have successfully placed the order!")
+                    .setMessage("Congratulation! You have successfully placed the order!" +
+                            "Would you like to share it with your firends?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Uri uri = Uri.parse("android.resource://" + mContext.getPackageName()
+                                    + "/drawable/" + "ic_launcher");
+                            Intent i = new Intent(Intent.ACTION_SEND)
+                                    .putExtra(Intent.EXTRA_TEXT, "Hey! I have successfully placed an order in " +
+                                            "food funda. Please check out the amazing app!")
+                                    .putExtra(Intent.EXTRA_STREAM, uri)
+                                    .setType("image/png");
+                            mContext.startActivity(Intent.createChooser(i, "send"));
+                        }
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+            progress.cancel();
+
+
         }
         else {
-            AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
+            progress.cancel();
             alert.setTitle("Error while checkout")
-                    .setMessage("An error has occured while checkingout with response code: "+ Integer.parseInt(response))
+                    .setMessage("An error has occured while checking out with response code: "+ Integer.parseInt(response))
                     .setNeutralButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
