@@ -85,11 +85,18 @@ public class MainActivity extends ActionBarActivity {
             public void onClick(View v) {
                 if (cart_count != 0) {
                     //startActivity(new Intent(getApplicationContext(), CartActivity.class));
-                    frame.setVisibility(View.VISIBLE);
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.container, new CartFragment())
-                            .addToBackStack(null)
-                            .commit();
+                    if (!mTwoPane) {
+                        frame.setVisibility(View.VISIBLE);
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.container, new CartFragment())
+                                .addToBackStack(null)
+                                .commit();
+                    }else{
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.menu_item_detail, new CartFragment())
+                                .addToBackStack(null)
+                                .commit();
+                    }
                 }
                 else{
                     AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
