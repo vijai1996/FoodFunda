@@ -85,8 +85,9 @@ public class MenuFragment extends Fragment {
                         args.putInt("price", price[position]);
                         args.putString("title", title[position]);
                 frag.setArguments(args);
-                getFragmentManager().beginTransaction()
-                        .add(Frameview, frag)
+                getFragmentManager().
+                        beginTransaction()
+                        .replace(Frameview, frag)
                         .addToBackStack("MenuFrag")
                         .commit();
                 /*Intent i = new Intent(getActivity(), ItemDetailActivity.class)
